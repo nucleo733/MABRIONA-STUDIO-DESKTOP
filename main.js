@@ -39,6 +39,24 @@ function createWindow() {
     return { action: 'deny' }
   })
 
+  // La ventana no tiene barra de direcciones ni botones de navegador —
+  // sin esto no había NINGUNA forma de volver atrás una vez adentro.
+  // Atajo de teclado estándar (Cmd+[ / Cmd+] en Mac, Alt+Flecha en
+  // Windows/Linux) + botones "atrás/adelante" del mouse en Windows.
+  mainWindow.webContents.on('before-input-event', (_event, input) => {
+    if (input.type !== 'keyDown') return
+    const isMac = process.platform === 'darwin'
+    const goesBack = isMac ? input.meta && input.key === '[' : input.alt && input.key === 'ArrowLeft'
+    const goesForward = isMac ? input.meta && input.key === ']' : input.alt && input.key === 'ArrowRight'
+    if (goesBack && mainWindow.webContents.canGoBack()) mainWindow.webContents.goBack()
+    if (goesForward && mainWindow.webContents.canGoForward()) mainWindow.webContents.goForward()
+  })
+
+  mainWindow.webContents.on('app-command', (_event, cmd) => {
+    if (cmd === 'browser-backward' && mainWindow.webContents.canGoBack()) mainWindow.webContents.goBack()
+    if (cmd === 'browser-forward' && mainWindow.webContents.canGoForward()) mainWindow.webContents.goForward()
+  })
+
   mainWindow.on('closed', () => {
     mainWindow = null
   })
