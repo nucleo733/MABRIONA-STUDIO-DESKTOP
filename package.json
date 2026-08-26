@@ -1,0 +1,43 @@
+{
+  "name": "mabriona-studio-desktop",
+  "productName": "MABRIONA STUDIO",
+  "version": "0.1.0",
+  "description": "App de escritorio descargable de MABRIONA STUDIO — motor real (Electron) que carga la plataforma de producción en su propia ventana nativa.",
+  "main": "main.js",
+  "author": "Wber733",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist:mac": "electron-builder --mac dir",
+    "dist:win": "electron-builder --win nsis --publish=never",
+    "dist:linux": "electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.mabriona.studio",
+    "productName": "MABRIONA STUDIO",
+    "icon": "build/icon.icns",
+    "files": ["main.js"],
+    "mac": {
+      "icon": "build/icon.icns",
+      "category": "public.app-category.music",
+      "target": [{ "target": "dir", "arch": ["x64", "arm64"] }]
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "category": "AudioVideo",
+      "target": [{ "target": "AppImage", "arch": ["x64"] }]
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}
