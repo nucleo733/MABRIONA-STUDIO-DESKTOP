@@ -28,11 +28,19 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true,
+      // `sandbox: true` exigía una firma real con la entitlement de
+      // sandbox — sin certificado de Apple, el build local salía
+      // cerrándose solo, sin error visible (mismo hallazgo que en
+      // MABRIONA-CIELO/main.js, 2026-08-27). No hace falta: no hay
+      // `preload`, el renderer ya no tiene Node de ninguna forma.
     },
   })
 
-  mainWindow.loadURL(STUDIO_URL)
+  // Siempre la versión más nueva al abrir — sin esto, una ventana
+  // dejada abierta días (o el caché de disco de Electron) podía seguir
+  // mostrando una MABRIONA STUDIO vieja aunque la web ya estuviera
+  // actualizada (mismo hallazgo que en MABRIONA-CIELO, 2026-08-27).
+  mainWindow.webContents.session.clearCache().finally(() => mainWindow.loadURL(STUDIO_URL))
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url)
@@ -50,6 +58,8 @@ function createWindow() {
     const goesForward = isMac ? input.meta && input.key === ']' : input.alt && input.key === 'ArrowRight'
     if (goesBack && mainWindow.webContents.canGoBack()) mainWindow.webContents.goBack()
     if (goesForward && mainWindow.webContents.canGoForward()) mainWindow.webContents.goForward()
+    const reloads = isMac ? input.meta && input.key.toLowerCase() === 'r' : input.control && input.key.toLowerCase() === 'r'
+    if (reloads) mainWindow.webContents.reloadIgnoringCache()
   })
 
   mainWindow.webContents.on('app-command', (_event, cmd) => {
