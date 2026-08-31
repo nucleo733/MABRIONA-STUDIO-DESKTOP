@@ -31,7 +31,7 @@ function createWindow() {
       // `sandbox: true` exigía una firma real con la entitlement de
       // sandbox — sin certificado de Apple, el build local salía
       // cerrándose solo, sin error visible (mismo hallazgo que en
-      // MABRIONA-CIELO/main.js, 2026-08-27). No hace falta: no hay
+      // BURBUJA-DESKTOP/main.js, 2026-08-27). No hace falta: no hay
       // `preload`, el renderer ya no tiene Node de ninguna forma.
     },
   })
@@ -39,7 +39,7 @@ function createWindow() {
   // Siempre la versión más nueva al abrir — sin esto, una ventana
   // dejada abierta días (o el caché de disco de Electron) podía seguir
   // mostrando una MABRIONA STUDIO vieja aunque la web ya estuviera
-  // actualizada (mismo hallazgo que en MABRIONA-CIELO, 2026-08-27).
+  // actualizada (mismo hallazgo que en BURBUJA-DESKTOP, 2026-08-27).
   mainWindow.webContents.session.clearCache().finally(() => mainWindow.loadURL(STUDIO_URL))
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {

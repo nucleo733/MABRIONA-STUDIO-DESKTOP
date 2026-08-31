@@ -1,6 +1,6 @@
 name: Build Windows
 
-# Igual que MABRIONA-BROWSER/MABRIONA-DJ-IA/MABRIONA-CIELO: Windows no se puede compilar desde la
+# Igual que MABRIONA-BROWSER/MATOKO-DJ/BURBUJA-DESKTOP: Windows no se puede compilar desde la
 # máquina de desarrollo habitual (necesita Wine, no instalado ahí) — este workflow usa un runner de
 # Windows real de GitHub Actions para compilar el instalador NSIS de verdad, y confirma que la app
 # instalada arranca de verdad en ese runner.
