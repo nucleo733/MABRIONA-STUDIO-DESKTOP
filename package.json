@@ -10,6 +10,7 @@
   "scripts": {
     "start": "electron .",
     "dist:mac": "electron-builder --mac dir",
+    "dist:mac:dmg": "electron-builder --mac dmg",
     "dist:win": "electron-builder --win nsis --publish=never",
     "dist:linux": "electron-builder --linux AppImage"
   },
@@ -25,7 +26,18 @@
     "mac": {
       "icon": "build/icon.icns",
       "category": "public.app-category.music",
-      "target": [{ "target": "dir", "arch": ["x64", "arm64"] }]
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }]
+    },
+    "dmg": {
+      "title": "MABRIONA STUDIO",
+      "icon": "build/icon.icns",
+      "background": null,
+      "window": { "width": 540, "height": 380 },
+      "contents": [
+        { "x": 140, "y": 190, "type": "file" },
+        { "x": 400, "y": 190, "type": "link", "path": "/Applications" },
+        { "x": 270, "y": 330, "type": "file", "path": "build/Desinstalar MABRIONA STUDIO.command", "name": "Desinstalar MABRIONA STUDIO.command" }
+      ]
     },
     "win": {
       "icon": "build/icon.ico",
