@@ -40,7 +40,18 @@ function createWindow() {
   // dejada abierta días (o el caché de disco de Electron) podía seguir
   // mostrando una MABRIONA STUDIO vieja aunque la web ya estuviera
   // actualizada (mismo hallazgo que en BURBUJA-DESKTOP, 2026-08-27).
-  mainWindow.webContents.session.clearCache().finally(() => mainWindow.loadURL(STUDIO_URL))
+  //
+  // `clearCache()` solo no alcanzaba (2026-09-04): mabriona.com registra
+  // un Service Worker, y un SW vive fuera del caché HTTP — se queda
+  // instalado con su propio Cache Storage y sigue respondiendo la versión
+  // que él guardó, así que la app abría en una MABRIONA STUDIO vieja aun
+  // recién arrancada. Hay que borrar también esos dos almacenes para que
+  // el arranque pida todo de verdad a la red.
+  const sesion = mainWindow.webContents.session
+  Promise.all([
+    sesion.clearCache(),
+    sesion.clearStorageData({ storages: ['serviceworkers', 'cachestorage'] }),
+  ]).finally(() => mainWindow.loadURL(STUDIO_URL))
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url)
